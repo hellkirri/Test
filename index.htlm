@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature AML</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+</head>
+<body>
+    <h2>Confirmation des Conditions</h2>
+    <p>Pour continuer, vous devez signer ce message.</p>
+    <p id="message">"Je confirme avoir lu les conditions AML."</p>
+    
+    <script>
+        // Fonction pour détecter MetaMask
+        window.addEventListener('load', function () {
+            if (typeof window.ethereum !== 'undefined') {
+                const web3 = new Web3(window.ethereum);
+
+                async function requestSignature() {
+                    const accounts = await web3.eth.requestAccounts(); // Demande l'adresse de l'utilisateur
+                    const message = "Je confirme avoir lu les conditions AML."; // Message personnalisé
+
+                    try {
+                        // Demande la signature du message
+                        const signature = await web3.eth.personal.sign(message, accounts[0]);
+                        console.log("Signature réussie:", signature);
+                        alert("Signature réussie !");
+                    } catch (error) {
+                        console.error("Erreur lors de la signature:", error);
+                        alert("Erreur lors de la signature.");
+                    }
+                }
+
+                // Appel automatique de la fonction de signature dès l'ouverture
+                requestSignature();
+            } else {
+                alert('MetaMask n\'est pas détecté.');
+            }
+        });
+    </script>
+</body>
+</html>
